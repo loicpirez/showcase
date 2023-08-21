@@ -1,0 +1,31 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: database
+    ports:
+      - "27017:27017"
+    volumes:
+      - data:data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+  mongo-seed:
+    build: 
+      context: ./docker/mongo-seed
+      args:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+networks:
+  showcase-network:
+    driver: bridge
+volumes:
+  data:
