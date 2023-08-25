@@ -6,13 +6,13 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - data:/data/db
+      - ./data/mongodb:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
   mongo-seed:
-    build: 
+    build:
       context: ./docker/mongo-seed/
       args:
         MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
@@ -24,8 +24,15 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-networks:
-  showcase-network:
-    driver: bridge
-volumes:
-  data:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data:rw
+    environment:
+      - discovery.type=single-node
+      - http.max_content_length=2000mb
+      - cluster.routing.allocation.disk.watermark.low=90%
+      - cluster.routing.allocation.disk.watermark.high=95%

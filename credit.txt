@@ -1,0 +1,2 @@
+Video Game Dataset by TRUNG HOANG - https://www.kaggle.com/datasets/jummyegg/rawg-game-dataset
+Wait for it - https://github.com/vishnubob/wait-for-it
